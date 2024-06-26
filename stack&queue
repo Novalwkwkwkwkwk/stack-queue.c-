@@ -1,0 +1,128 @@
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+// Ukuran maksimal stack dan queue
+int maksimal = 5;
+struct Pelanggan {
+    int nomor;
+    string nama;
+    double tagihan;
+};
+
+Pelanggan arrayTagihan[5];
+int top = 0; // untuk stack
+int front = -1, rear = -1; // untuk queue
+
+// Fungsi untuk stack
+bool penuhStack() {
+    return top == maksimal;
+}
+
+bool kosongStack() {
+    return top == 0;
+}
+
+void pushPelanggan(int nomor, string nama, double tagihan) {
+    if (penuhStack()) {
+        cout << "Stack penuh" << endl;
+    } else {
+        arrayTagihan[top] = {nomor, nama, tagihan};
+        top++;
+    }
+}
+
+void popPelanggan() {
+    if (kosongStack()) {
+        cout << "Stack kosong" << endl;
+    } else {
+        top--;
+        arrayTagihan[top] = {0, "", 0.0};
+    }
+}
+
+void displayPelangganStack() {
+    cout << "Data Stack Pelanggan: " << endl;
+    cout << left << setw(10) << "Nomor" << setw(20) << "Nama" << setw(15) << "Tagihan" << endl;
+    cout << "-------------------------------------------------" << endl;
+    for (int i = maksimal - 1; i >= 0; i--) {
+        if (arrayTagihan[i].nama != "") {
+            cout << left << setw(10) << arrayTagihan[i].nomor 
+                 << setw(20) << arrayTagihan[i].nama 
+                 << setw(15) << arrayTagihan[i].tagihan << endl;
+        }
+    }
+    cout << "\n" << endl;
+}
+
+// Fungsi untuk queue
+bool penuhQueue() {
+    return (rear + 1) % maksimal == front;
+}
+
+bool kosongQueue() {
+    return front == -1;
+}
+
+void enqueuePelanggan(int nomor, string nama, double tagihan) {
+    if (penuhQueue()) {
+        cout << "Queue penuh" << endl;
+    } else {
+        if (kosongQueue()) {
+            front = 0;
+        }
+        rear = (rear + 1) % maksimal;
+        arrayTagihan[rear] = {nomor, nama, tagihan};
+    }
+}
+
+void dequeuePelanggan() {
+    if (kosongQueue()) {
+        cout << "Queue kosong" << endl;
+    } else {
+        arrayTagihan[front] = {0, "", 0.0};
+        if (front == rear) {
+            front = -1;
+            rear = -1;
+        } else {
+            front = (front + 1) % maksimal;
+        }
+    }
+}
+
+void displayPelangganQueue() {
+    cout << "Data Queue Pelanggan: " << endl;
+    cout << left << setw(10) << "Nomor" << setw(20) << "Nama" << setw(15) << "Tagihan" << endl;
+    cout << "-------------------------------------------------" << endl;
+    if (!kosongQueue()) {
+        int i = front;
+        while (true) {
+            cout << left << setw(10) << arrayTagihan[i].nomor 
+                 << setw(20) << arrayTagihan[i].nama 
+                 << setw(15) << arrayTagihan[i].tagihan << endl;
+            if (i == rear) break;
+            i = (i + 1) % maksimal;
+        }
+    }
+    cout << "\n" << endl;
+}
+
+int main() {
+    // Test stack
+    pushPelanggan(1, "Noval", 1000.0);
+    displayPelangganStack();
+    pushPelanggan(2, "Aji", 2000.0);
+    displayPelangganStack();
+    popPelanggan();
+    displayPelangganStack();
+
+    // Test queue
+    enqueuePelanggan(1, "Noval", 1000.0);
+    displayPelangganQueue();
+    enqueuePelanggan(2, "Aji", 2000.0);
+    displayPelangganQueue();
+    dequeuePelanggan();
+    displayPelangganQueue();
+
+    return 0;
+}
