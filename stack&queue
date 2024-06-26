@@ -45,12 +45,11 @@ void displayPelangganStack() {
     cout << "Data Stack Pelanggan: " << endl;
     cout << left << setw(10) << "Nomor" << setw(20) << "Nama" << setw(15) << "Tagihan" << endl;
     cout << "-------------------------------------------------" << endl;
-    for (int i = maksimal - 1; i >= 0; i--) {
-        if (arrayTagihan[i].nama != "") {
-            cout << left << setw(10) << arrayTagihan[i].nomor 
-                 << setw(20) << arrayTagihan[i].nama 
-                 << setw(15) << arrayTagihan[i].tagihan << endl;
-        }
+    int count = 0;
+    for (int i = top - 1; i >= 0 && count < 3; i--, count++) {
+        cout << left << setw(10) << arrayTagihan[i].nomor 
+             << setw(20) << arrayTagihan[i].nama 
+             << setw(15) << arrayTagihan[i].tagihan << endl;
     }
     cout << "\n" << endl;
 }
@@ -96,12 +95,14 @@ void displayPelangganQueue() {
     cout << "-------------------------------------------------" << endl;
     if (!kosongQueue()) {
         int i = front;
-        while (true) {
+        int count = 0;
+        while (true && count < 3) {
             cout << left << setw(10) << arrayTagihan[i].nomor 
                  << setw(20) << arrayTagihan[i].nama 
                  << setw(15) << arrayTagihan[i].tagihan << endl;
             if (i == rear) break;
             i = (i + 1) % maksimal;
+            count++;
         }
     }
     cout << "\n" << endl;
@@ -110,18 +111,16 @@ void displayPelangganQueue() {
 int main() {
     // Test stack
     pushPelanggan(1, "Noval", 1000.0);
-    displayPelangganStack();
     pushPelanggan(2, "Aji", 2000.0);
-    displayPelangganStack();
-    popPelanggan();
+    pushPelanggan(3, "Cemek", 3000.0);
+    
     displayPelangganStack();
 
     // Test queue
     enqueuePelanggan(1, "Noval", 1000.0);
-    displayPelangganQueue();
     enqueuePelanggan(2, "Aji", 2000.0);
-    displayPelangganQueue();
-    dequeuePelanggan();
+    enqueuePelanggan(3, "Cemek", 3000.0);
+    
     displayPelangganQueue();
 
     return 0;
